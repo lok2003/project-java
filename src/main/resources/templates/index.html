@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Spring Boot Web App</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        h1   { color: #2d6a4f; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background: #2d6a4f; color: white; }
+        tr:nth-child(even) { background: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h1>📋 Messages</h1>
+    <p>Server running on port <strong>8080</strong></p>
+
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Author</th><th>Content</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="msg : ${messages}">
+                <td th:text="${msg.id}"></td>
+                <td th:text="${msg.author}"></td>
+                <td th:text="${msg.content}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr/>
+    <h2>REST API Endpoints</h2>
+    <ul>
+        <li><code>GET  /api/messages</code>      — list all messages</li>
+        <li><code>GET  /api/messages/{id}</code>  — get one message</li>
+        <li><code>POST /api/messages</code>       — create a message (JSON body)</li>
+        <li><code>DELETE /api/messages/{id}</code>— delete a message</li>
+    </ul>
+</body>
+</html>

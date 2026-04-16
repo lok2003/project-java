@@ -1,0 +1,22 @@
+# Compiled output
+target/
+*.class
+
+# Maven
+.mvn/
+!.mvn/wrapper/
+
+# IDE
+.idea/
+*.iml
+.eclipse
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
