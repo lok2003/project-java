@@ -1,0 +1,32 @@
+name: ci workflow for java
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    #strategy:
+     # fail-fast: false
+    steps:
+      - name: checkout the code 
+        uses: actions/checkout@v4
+
+      - name: set-up java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: build package
+        run: mvn clean package -DskipTests
+      
+      - name: build test results
+        run: mvn test
+      
+    
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          path: target/*.jar
