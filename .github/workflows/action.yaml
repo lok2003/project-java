@@ -17,16 +17,19 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'maven'
       
-      - name: build package
-        run: mvn clean package -DskipTests
+      #- name: build package
+      #  run: mvn clean package -DskipTests
       
-      - name: build test results
-        run: mvn test
+      #- name: build test results
+       # run: mvn test
       
-    
+      - name: Build and Test
+        run: mvn clean package
+        
       - name: upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: java-app-jar
           path: target/*.jar
