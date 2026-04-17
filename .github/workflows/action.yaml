@@ -38,8 +38,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java-app-jar
-          path: target/*.jar
+          path: target/*.jar 
+      
+      - name: Manual Backup
+        if: success()
+        run: |
+          mkdir -p ./backup
+          cp target/*.jar ./backup/
           
       - name: Debug on Failure
         if: failure()
         run: echo "Check the pom.xml or test logs for errors."
+      
+      - name: Final Status
+        if: always()
+        run: echo "Workflow execution is completed"
