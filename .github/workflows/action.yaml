@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '13'
+          java-version: '17'
           cache: 'maven'
       
       #- name: build package
@@ -38,7 +38,7 @@ jobs:
         with:
           name: java-app-jar
           path: target/*.jar
-
+          
       - name: Alert on Failure
         if: failure()
         run: echo "The Maven build failes on the dev Branch!"
