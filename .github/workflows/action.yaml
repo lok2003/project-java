@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '13'
           cache: 'maven'
       
       #- name: build package
@@ -33,7 +33,12 @@ jobs:
         run: mvn clean package
         
       - name: upload artifacts
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: java-app-jar
           path: target/*.jar
+
+      - name: Alert on Failure
+        if: failure()
+        run: echo "The Maven build failes on the dev Branch!"
