@@ -1,59 +1,71 @@
 name: ci workflow for java
+
 on:
   push:
     branches:
       - dev
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     permissions: 
-       contents: read
-       packages: write
-       security-events: write
+      contents: read
+      packages: write
+      security-events: write
+
     strategy:
       fail-fast: false
       matrix:
-        java-version: [17,21,25]
-        distribution: [temurin, microsoft, corretto, oracle,semeru ]
+        java-version: [17, 21, 25]
+        distribution: [temurin, microsoft, corretto, oracle, semeru]
+
     steps:
-      - name: checkout the code 
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: set-up java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java-version }}
-          cache: 'maven'
-      
-      #- name: build package
-      #  run: mvn clean package -DskipTests
-      
-      #- name: build test results
-       # run: mvn test
-      
+          cache: maven
+
       - name: Build and Test
         id: maven_build
-        run: mvn clean package
-        
-      - name: upload artifacts
+        run: mvn clean verify
+
+      # ✅ SonarCloud Scan (ONLY once)
+      - name: SonarCloud Scan
+        if: matrix.java-version == 17 && matrix.distribution == 'temurin'
+        run: mvn sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # ✅ Quality Gate (fail if code is bad)
+      - name: Sonar Quality Gate
+        if: matrix.java-version == 17 && matrix.distribution == 'temurin'
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Upload Artifacts
         if: steps.maven_build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          #name: java-app-jar
           name: jar-${{ matrix.distribution }}-java${{ matrix.java-version }}
-          path: target/*.jar 
-      
+          path: target/*.jar
+
       - name: Manual Backup
         if: success()
         run: |
           mkdir -p ./backup
           cp target/*.jar ./backup/
-          
+
       - name: Debug on Failure
         if: failure()
         run: echo "Check the pom.xml or test logs for errors."
-      
+
       - name: Final Status
         if: always()
-        run: echo "Workflow execution is completed" 
+        run: echo "Workflow execution is completed"
