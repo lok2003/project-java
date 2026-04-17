@@ -27,8 +27,8 @@
         <java.version>17</java.version>
 
         <!-- SonarCloud -->
-        <sonar.projectKey>your_project_key</sonar.projectKey>
-        <sonar.organization>your_org</sonar.organization>
+        <sonar.projectKey>lokesh-project-java</sonar.projectKey>
+        <sonar.organization>lokesh-github</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <!-- JaCoCo Coverage Report Path -->
