@@ -30,15 +30,16 @@ jobs:
        # run: mvn test
       
       - name: Build and Test
+        id: maven_build
         run: mvn clean package
         
       - name: upload artifacts
-        if: success()
+        if: steps.maven_build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: java-app-jar
           path: target/*.jar
           
-      - name: Alert on Failure
+      - name: Debug on Failure
         if: failure()
-        run: echo "The Maven build failes on the dev Branch!"
+        run: echo "Check the pom.xml or test logs for errors."
