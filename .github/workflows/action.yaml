@@ -13,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java-version: [11,17,21,25]
-        distribution: [temurin, microsoft, corretto, oracle]
+        java-version: [17,21,25]
+        distribution: [temurin, microsoft, corretto, oracle,semeru ]
     steps:
       - name: checkout the code 
         uses: actions/checkout@v4
