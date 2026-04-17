@@ -10,8 +10,11 @@ jobs:
        contents: read
        packages: write
        security-events: write
-    #strategy:
-     # fail-fast: false
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [11,17,21,25]
+        distribution: [temurin, microsoft, corretto, oracle]
     steps:
       - name: checkout the code 
         uses: actions/checkout@v4
@@ -19,8 +22,8 @@ jobs:
       - name: set-up java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java-version }}
           cache: 'maven'
       
       #- name: build package
@@ -37,7 +40,8 @@ jobs:
         if: steps.maven_build.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: java-app-jar
+          #name: java-app-jar
+          name: jar-${{ matrix.distribution }}-java${{ matrix.java-version }}
           path: target/*.jar 
       
       - name: Manual Backup
@@ -52,4 +56,4 @@ jobs:
       
       - name: Final Status
         if: always()
-        run: echo "Workflow execution is completed"
+        run: echo "Workflow execution is completed" 
