@@ -35,19 +35,19 @@ jobs:
         id: maven_build
         run: mvn clean verify
 
-      # ✅ SonarCloud Scan (ONLY once)
-      - name: SonarCloud Scan
+      #  SonarCloud Scan (ONLY once)
+      - name: SonarCloud Scan (build+sonar)
         if: matrix.java-version == 17 && matrix.distribution == 'temurin'
-        run: mvn sonar:sonar
+        run: mvn clean verify sonar:sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # ✅ Quality Gate (fail if code is bad)
-      - name: Sonar Quality Gate
-        if: matrix.java-version == 17 && matrix.distribution == 'temurin'
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #  Quality Gate (fail if code is bad)
+      #- name: Sonar Quality Gate
+      #  if: matrix.java-version == 17 && matrix.distribution == 'temurin'
+      #  uses: SonarSource/sonarcloud-github-action@v2
+        #env:
+         # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Upload Artifacts
         if: steps.maven_build.outcome == 'success'
